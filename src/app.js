@@ -99,7 +99,6 @@ class SonHarfApp {
 
 
     init() {
-        this.defineSpeechReg();
         this.speechListen();
         this.speechSynt();
         this.checkNames();

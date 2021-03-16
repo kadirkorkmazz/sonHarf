@@ -5,9 +5,18 @@
   "rules": {
     "prefer-destructuring": ["error", {"object": true, "array": true}],
     "no-var": ["error"],
-    "prettier/prettier": ["error"],
+    "prettier/prettier": ["off"],
     "no-console":"off",
-    "import/no-extraneous-dependencies": "off"
+    "import/no-extraneous-dependencies": "off",
+    "no-undef":"off",
+    "prefer-const":"off",
+    "no-unused-vars":"off",
+    "no-self-assign":"off",
+    "spaced-comment":"off",
+    "prefer-arrow-callback":"off",
+    "func-names":"off",
+    "class-methods-use-this":"off",
+    "prefer-template":"off"
     
   }
 }

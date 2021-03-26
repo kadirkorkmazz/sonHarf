@@ -4,22 +4,37 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+    <script src="https://kit.fontawesome.com/36a2da0325.js" crossorigin="anonymous"></script>
+
     <title>Son Harf App</title>
   </head>
   <body>
-    <section>
+    <section id="header">
       <h1>Son Harf App</h1>
       <p>Avaliable Chrome Only</p>
+    </section>
+    <section id="body">
       <div class="buttons">
-        <button class="startRecButton btn btn-success">Start Recording</button>
+        <button id="startRecButton">
+              <i class="fas fa-microphone"></i>
+            </span>
+          </span>
+        </button>
         <br />
         <br />
-        <button class="startGameButton btn btn-info">Start Game</button>
+        <button id="startGameButton" class="btn btn-info">Start Game</button>
         <button class="resetGameButton btn btn-danger">Reset Game</button>
+        <br />
+        <p><span id="timerP" class="badge badge-pill badge-dark">15</span></p>
       </div>
 
       <div class="container">
-        <div class="texts"></div>
+        <div class="texts" id="texts"></div>
       </div>
     </section>
     <script src="./bundle.js"></script>

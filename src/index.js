@@ -5,9 +5,10 @@ import SonHarfApp from './app';
 
 let sonHarfApp = new SonHarfApp({
     textsSelector: '.texts',
-    startRecButtonSelector: '.startRecButton',
-    startGameButtonSelector: '.startGameButton',
-    resetGameButtonSelector: '.resetGameButton'
+    startRecButtonSelector: 'startRecButton',
+    startGameButtonSelector: '#startGameButton',
+    resetGameButtonSelector: '.resetGameButton',
+    timerSelector: '#timerP'
 });
 
 sonHarfApp.init();

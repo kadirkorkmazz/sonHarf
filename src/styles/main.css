@@ -10,6 +10,7 @@ section#header {
   color: rgba(255, 255, 255, 0.322);
   text-align: center;
   padding: 20px 0;
+  display: block;
 }
 
 section#body {
@@ -22,6 +23,7 @@ section#body {
 .container {
   text-align: center;
   max-width: 500px;
+  display: flex;
 }
 p + p::before {
   content: '→';
@@ -30,23 +32,24 @@ p + p::before {
   margin-right: 10px;
 }
 
-.texts p {
+.nameArea p {
   float: left;
-  color: rgb(255, 0, 0);
+  color: #dc3545;
   text-align: left;
   padding: 8px;
   margin-bottom: 10px;
   margin-right: 5px;
   font-size: 22px;
+  animation: normal;
   -webkit-animation: fadein 1s;
 }
 
-.texts p.user {
-  color: rgba(0, 204, 255, 0.781);
+.nameArea p.user {
+  color: #007bff;
   text-align: right;
 }
 
-@-webkit-keyframes fadein {
+@keyframes fadein {
   from {
     opacity: 0;
   }
@@ -54,6 +57,7 @@ p + p::before {
     opacity: 1;
   }
 }
+
 #timerP {
   text-align: center;
   font-size: 48px;
@@ -61,12 +65,84 @@ p + p::before {
   margin-bottom: 10px;
 }
 
-.buttons {
-  text-align: center;
-  margin-bottom: 20px;
-}
-#startRecButton {
+#startMicButton {
   border: none;
   color: rgba(255, 255, 255, 0.322);
   font-size: 2rem;
+}
+
+.playerNameArea {
+  padding-bottom: 10px;
+}
+
+#playerNameInput {
+  margin-left: 40%;
+  margin-right: 40%;
+  width: 20%;
+}
+
+.col-md {
+  max-width: 200px;
+  display: block;
+  color: antiquewhite;
+}
+
+table {
+  color: rgba(255, 255, 255, 0.322);
+  display: inline-block;
+  position: absolute;
+  left: 3%;
+  top: 35px;
+  max-width: 50px;
+  max-height: 50px;
+  z-index: 100;
+}
+
+.table td,
+.table th {
+  color: rgba(255, 255, 255, 0.322);
+  height: 4px;
+}
+
+#liveScore {
+  color: black;
+  position: absolute;
+  right: 12%;
+  top: 5%;
+  font-size: 35px;
+  z-index: 100;
+}
+
+.input-group {
+  position: absolute;
+  margin-left: 40%;
+  margin-right: 40%;
+  max-width: 20%;
+}
+
+#reloadGameButton {
+  position: absolute;
+  right: 25px;
+  bottom: 25px;
+}
+
+#startGameButton {
+  font-size: 30px;
+}
+
+#introduction {
+  right: 5%;
+  top: 20%;
+  position: absolute;
+  max-width: 250px;
+  max-height: 500px;
+  font-size: 12px;
+  text-align: left;
+  opacity: 0.7;
+}
+
+@media (max-width: 1026px) {
+  #fadeshow1 {
+    display: none;
+  }
 }

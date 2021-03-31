@@ -1,116 +1,210 @@
 import names from "./en-names.json"
+import { sortingList, createTableElement, changeTurn, returnLastLetter, filterNamesbyFirstLetter, randomNumber, chooseDifficulty } from "./helpers"
+import { getScoreFromApi, addScoreToApi } from "./data"
 
 window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 const recognition = new window.SpeechRecognition();
+recognition.lang = "en-EN";
 
 const synthesis = window.speechSynthesis;
-let utter = new SpeechSynthesisUtterance();
+const utterance = new SpeechSynthesisUtterance();
 
-let usedNames = [];
-let lastChar = "j";
+let usedNamesList = [];
+let lastLetter = "j";
 let timeleft = 15;
 let myTimer;
 let gameState = "on";
-let turn = "ai";
-let aiScore = 0;
-let userScore = 0;
+let gameTurn = "computer";
+let playerScore = 0;
+let highscoreList = [];
 
 class SonHarfApp {
     constructor(options) {
-        let {
-            textsSelector,
-            startRecButtonSelector,
+        const {
+            nameAreaSelector,
+            startMicButtonSelector,
             startGameButtonSelector,
-            resetGameButtonSelector,
-            timerSelector
+            reloadGameButtonSelector,
+            timerSelector,
+            playerNameInputSelector,
+            scoreTableElSelector,
+            liveScoreSelector,
+            scoreTableSelector,
+            difficultyAreaSelector,
+            introductionSelector
         } = options;
 
-        this.$texts = document.querySelector(textsSelector);
-        this.$startRecButton = document.getElementById(startRecButtonSelector);
+        this.$nameArea = document.querySelector(nameAreaSelector);
+        this.$startMicButton = document.getElementById(startMicButtonSelector);
         this.$startGameButton = document.querySelector(startGameButtonSelector);
-        this.$resetGameButton = document.querySelector(resetGameButtonSelector);
+        this.$reloadGameButton = document.querySelector(reloadGameButtonSelector);
         this.$timerP = document.querySelector(timerSelector);
+        this.$playerNameInput = document.querySelector(playerNameInputSelector);
+        this.$liveScore = document.querySelector(liveScoreSelector);
+        this.$scoreTableEl = document.getElementsByTagName(scoreTableElSelector);
+        this.$scoreTable = document.querySelector(scoreTableSelector);
+        this.$difficultyArea = document.querySelector(difficultyAreaSelector);
+        this.$introduction = document.querySelector(introductionSelector);
     }
 
-
-
     startGame() {
+        this.beforeStart();
         this.$startGameButton.addEventListener('click', () => {
+            this.resetVariables();
             this.startGameEvents();
         });
     }
 
     startGameEvents() {
-        this.aiSpeechName();
+        this.computerSpeak();
         gameState = "on";
-        //this.$startGameButton.style.visibility = "hidden";
-        this.$timerP.style.visibility = "visible";
+        this.$timerP.style.display = "inline-block";
+        this.$playerNameInput.style.display = "none";
+        this.$startGameButton.style.display = "none";
+        this.$difficultyArea.style.display = "none";
+        this.$introduction.style.visibility = "hidden";
+    }
 
+    afterGameScene() {
+        this.$startGameButton.innerHTML = "🔄 Play Again!"
+        this.$startGameButton.style.display = "inline-block";
     }
 
     beforeStart() {
-        this.$timerP.style.visibility = "hidden";
+        this.$timerP.style.display = "none";
+    }
+
+    resetVariables() {
+        usedNamesList = [];
+        this.$nameArea.innerText = "";
+        this.$timerP.className = "badge badge-pill badge-dark";
+        clearInterval(myTimer);
+        this.$timerP.innerText = 15;
+        playerScore = 0;
+        this.$liveScore.innerHTML = 0;
     }
 
     resetGame() {
-        this.$resetGameButton.addEventListener("click", () => {
-            this.beforeStart();
-            usedNames = [];
-            this.$texts.innerText = "";
-            this.$timerP.className = "badge badge-pill badge-dark";
-            clearInterval(myTimer);
-            this.$timerP.innerText = 15;
-            //this.$startGameButton.style.visibility = "visible";
-
-
+        this.$reloadGameButton.addEventListener("click", () => {
+            window.location.reload();
         })
     }
 
-    startAgain() {
+    startMic() {
+        this.$startMicButton.addEventListener("click", () => {
+            recognition.start();
+            this.$startMicButton.style.color = "#DC3545";
+        });
+    }
+
+    startMicAgain() {
         recognition.addEventListener('end', () => {
             recognition.start();
         })
     }
 
-    startRec() {
-        this.$startRecButton.addEventListener("click", () => {
-            recognition.start();
-            this.$startRecButton.style.color = "red";
-        });
+    computerSpeakTurn() {
+        const computerChance = chooseDifficulty();
+        const random = randomNumber(1, 100);
+        if (computerChance > random) {
+            this.computerSpeak();
+        }
+        else {
+            setTimeout(() => {
+                gameTurn = "computer";
+                this.gameOver();
+
+            }, 4000);
+        }
     }
 
-
-    aiSpeechName() {
-        turn = "ai";
-        let from = "ai";
-        let time = this.aiRandomThinkTime();
-        console.log(time);
+    computerSpeak() {
+        gameTurn = "computer";
+        const from = "computer";
+        const thinkTime = randomNumber(3, 5);
         setTimeout(() => {
-            let randomName = this.randomName();
-            if (!(this.checkUsedNames(randomName)) && gameState === "on") {
-                utter.text = randomName;
-                synthesis.speak(utter);
+            const randomName = this.getRandomName();
+            if (!(this.isNameUsed(randomName)) && gameState === "on") {
+                utterance.text = randomName;
+                synthesis.speak(utterance);
                 this.addNameToScreen(randomName, from);
-            } else {
-                console.log("Bu isim söylendi && Oyun bitti");
             }
-        }, time * 1000);
+        }, thinkTime * 1000);
     }
 
-    randomName() {
-        let filteredNames = this.filterNames();
-        const keys = Object.keys(filteredNames)
-        const randomIndex = Math.floor(Math.random() * keys.length)
-        const name = filteredNames[randomIndex]
-        return name;
+    getRandomName() {
+        const filteredNames = filterNamesbyFirstLetter(names, lastLetter);
+        const filteredNamesKeys = Object.keys(filteredNames)
+        const randomIndex = Math.floor(Math.random() * filteredNamesKeys.length)
+        const randomName = filteredNames[randomIndex]
+        return randomName;
     }
 
-    checkUsedNames(saidName) {
-        let result = usedNames.filter(item => item.toLowerCase() === saidName.toLowerCase());
-        if (result.length > 0) {
+    isNameUsed(saidName) {
+        const nameStatus = usedNamesList.filter(usedName => usedName.toLowerCase() === saidName.toLowerCase());
+        if (nameStatus.length > 0) {
             return true;
         }
         return false
+    }
+
+    listenSpeech() {
+        recognition.addEventListener('result', (spoken) => {
+            const userSaid = Array.from(spoken.results[0][0].transcript)
+                .join('');
+            this.checkGrammar(userSaid);
+        });
+        this.startMicAgain();
+    }
+
+    checkGrammar(userSaid) {
+        gameTurn = "user";
+        const filteredNames = filterNamesbyFirstLetter(names, lastLetter);
+        const splitUserSaid = userSaid.toLowerCase().split(" ");
+
+        filteredNames.forEach(name => {
+            if (splitUserSaid.includes(name.toLowerCase())) {
+                if (!(this.isNameUsed(name)) && gameState === "on" && gameTurn === "user") {
+                    this.addNameToScreen(name, gameTurn);
+                    this.computerSpeakTurn();
+                }
+            }
+        }
+        );
+    }
+
+    addNameToScreen(name, from) {
+        const p = document.createElement('p');
+        p.innerText = name;
+        p.classList.add(from);
+        this.$nameArea.appendChild(p);
+        this.afterTurn(name, from);
+    }
+
+    afterTurn(name, fromWho) {
+        if (fromWho === "user") {
+            playerScore += 1;
+            this.$liveScore.innerHTML = playerScore;
+        }
+        gameTurn = changeTurn(fromWho);
+        usedNamesList.push(name);
+        lastLetter = returnLastLetter(name);
+        this.reTimer();
+    }
+
+    gameOver() {
+        clearInterval(myTimer);
+        gameState = "off";
+        if (gameTurn === "computer") {
+            playerScore += 5;
+            this.$timerP.innerText = `🥳You won!\n Score:${playerScore}`;
+            this.$timerP.className = "badge badge-pill badge-primary";
+        } else {
+            this.$timerP.innerText = `😓You Lost!\n Score:${playerScore}`;
+            this.$timerP.className = "badge badge-pill badge-danger";
+        }
+        this.addScores();
+        this.afterGameScene();
     }
 
     timer() {
@@ -129,99 +223,52 @@ class SonHarfApp {
 
     checkTimer() {
         if (timeleft < 0) {
-            clearInterval(myTimer);
-            this.$timerP.innerText = "Game Over"
-            gameState = "off";
             this.gameOver();
-            if (turn === "ai") {
-                this.$timerP.innerText = "User Win!"
-                this.$timerP.className = "badge badge-pill badge-primary";
-
-            } else {
-                this.$timerP.innerText = "Ai Win!"
-                this.$timerP.className = "badge badge-pill badge-danger";
-            }
         }
     }
 
-    addNameToScreen(name, from) {
-
-        let p = document.createElement('p');
-        p.innerText = name;
-
-        let fromWho = (from === "ai") ? "ai" : "user";
-        p.classList.add(fromWho);
-
-        if (fromWho === "ai") {
-            turn = "user";
-        }
-        this.$texts.appendChild(p);
-        usedNames.push(name);
-        lastChar = this.returnLastLetter(name);
-        this.reTimer();
-
+    getScores() {
+        getScoreFromApi().then((scores) => {
+            scores.forEach((score) => {
+                highscoreList.push(score);
+            });
+        }).then(() => {
+            this.fillScoreboard(highscoreList)
+        })
     }
 
-    speechListen() {
-        recognition.addEventListener('result', (e) => {
-            const text = Array.from(e.results[0][0].transcript)
-                .join('');
-            this.checkGrammar(text);
-            console.log(text);
+    fillScoreboard(scoreList) {
+        for (let i = 0; i < 5; i += 1) {
+            const { score, player } = scoreList[i];
+            const $newScoreEl = document.createElement('tr');
+            $newScoreEl.innerHTML = createTableElement(i, player, score);
+            this.$scoreTable.appendChild($newScoreEl);
+        }
+    }
+
+    updateScoreboard(scoreList) {
+        for (let i = 0; i < 5; i += 1) {
+            const { score, player } = scoreList[i];
+            this.$scoreTableEl[i + 1].innerHTML = createTableElement(i, player, score);
+        }
+    }
+
+    addScores() {
+        const playerName = (this.$playerNameInput.value === "") ? "Anonymous" : this.$playerNameInput.value;
+        const gameResult = { player: playerName, score: playerScore }
+        addScoreToApi(gameResult).then(() => {
+            highscoreList.push(gameResult);
+            highscoreList = sortingList(highscoreList);
+            this.updateScoreboard(highscoreList);
         });
-        this.startAgain();
-    }
-
-
-    aiRandomThinkTime() {
-        let min = 1;
-        let max = 3;
-        let rand = Math.floor(Math.random() * (max - min + 1) + min); //Generate Random number between 5 - 10
-        return rand;
-    }
-
-    gameOver() {
-        recognition.stop();
-    }
-
-    checkGrammar(userSaid) {
-        let filteredNames = this.filterNames();
-        filteredNames.forEach(name => {
-            if (userSaid) {
-                let splitUserSaid = userSaid.toLowerCase().split(" ");
-                if (splitUserSaid.includes(name.toLowerCase())) {
-                    console.log("Kelime eşleşti!");
-                    if (!(this.checkUsedNames(name)) && gameState === "on") {
-                        this.addNameToScreen(name);
-                        this.aiSpeechName();
-                    } else {
-                        console.log("Bunu söyledin");
-                    }
-                }
-            }
-        }
-        );
-    }
-
-
-
-    returnLastLetter(saidName) {
-        let lastLetter = saidName.slice(-1);
-        return lastLetter;
-    }
-
-    filterNames() {
-        let filteredNames = names.filter(name => name[0].toLowerCase() === lastChar);
-        return filteredNames;
     }
 
     init() {
-        this.beforeStart();
-        this.speechListen();
-        this.checkGrammar();
-        this.startRec();
+        this.listenSpeech();
+        this.startMic();
         this.startGame();
         this.resetGame();
+        this.getScores();
     }
 }
 

@@ -14,29 +14,80 @@
     <title>Son Harf App</title>
   </head>
   <body>
+      <div>
+        <table class="table table-dark d-none d-sm-block" id="scoreboard">
+          <thead  class="thead-dark">
+          <tr>
+              <th scope="col">#</th>
+              <th scope="col">Player</th>
+              <th scope="col">Score</th>
+          </tr>
+          </thead>
+          <tbody id="table-tbody">
+          </tbody>
+      </table>
+      </div>
+
     <section id="header">
       <h1>Son Harf App</h1>
       <p>Avaliable Chrome Only</p>
-    </section>
-    <section id="body">
-      <div class="buttons">
-        <button id="startRecButton">
-              <i class="fas fa-microphone"></i>
-            </span>
-          </span>
-        </button>
-        <br />
-        <br />
-        <button id="startGameButton" class="btn btn-info">Start Game</button>
-        <button class="resetGameButton btn btn-danger">Reset Game</button>
-        <br />
-        <p><span id="timerP" class="badge badge-pill badge-dark">15</span></p>
-      </div>
+    </section>    
 
+    <section id="body">
+      <div>
+        <button id="startMicButton">
+              <i class="fas fa-microphone"></i>          
+        </button>
+        <br>
+        <br>
+     <div class="playerNameArea">
+              <input type="text" id="playerNameInput" class="form-control badge-pill" placeholder="Enter name to save score">
+          </div>
+          <div class="input-group mb-3 difficultyArea">
+            <div class="input-group-prepend">
+              <label class="input-group-text badge-pill" for="difficultyInput">Difficulty</label>
+            </div>
+            <select class="custom-select badge-pill" id="difficultyInput">
+              <option value="easy">Easy</option>
+              <option value="medium">Medium</option>
+              <option value="hard">Hard</option>
+            </select>
+          </div>
+          <p><span id="timerP" class="badge badge-pill badge-dark">8</span></p>
+        <button id="startGameButton" class="btn btn-outline-warning badge-pill">▶️Play</button>
+        <button id="reloadGameButton" class="reloadGameButton btn btn-outline-danger badge-pill">Reload Game</button>
+        
+      </div>
+      <div id="introduction" class="d-none d-sm-block">
+        <h6><b><i>Yönergeler</i></b></h6>
+        <p>
+          &#9679; Oyuna başlamadan önce mikrofonu etkinleştir. <br>
+          &#9679; Play'e bastığında oyun başlar ve bilgisayar bir isim söyler. <br>
+          &#9679; 8 saniye içinde bilgisayarın söylediği ismin son harfi ile yeni bir isim türet. <br>
+          &#9679; 8 saniye içinde istediğin kadar deneme yapabilirsin. <br>
+          &#9679; Zincirde ilerlediğin her kelime için 1 puan, bilgisayar isim söyleyemezse ve kazanırsan +5 puan alırsın. <br>
+        </p>
+        <h6><b><i>Zorluk Seviyeleri</i></b></h6>
+        <p>
+          &#9679; <b>Easy: </b>Bu modda bilgisayar %30 ihtimalle kelime söyleyemez.  <br>
+          &#9679; <b>Medium: </b>Bu modda bilgisayar %15 ihtimalle kelime söyleyemez.  <br>
+          &#9679; <b>Hard: </b>Bu modda bilgisayar her zaman kelime söyler. Zoru seven oyuncular için!  <br>
+
+        </p>
+
+
+
+
+
+       
+        </div>
+      </div>
       <div class="container">
-        <div class="texts" id="texts"></div>
+        <div class="nameArea" id="nameArea"></div>
       </div>
     </section>
+    <p><span id="liveScore" class="badge badge-pill badge-warning ">0</span></p>
+
     <script src="./bundle.js"></script>
   </body>
 </html>

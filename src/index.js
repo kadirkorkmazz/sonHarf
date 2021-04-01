@@ -9,12 +9,12 @@ const sonHarfApp = new SonHarfApp({
     startGameButtonSelector: '#startGameButton',
     reloadGameButtonSelector: '.reloadGameButton',
     timerSelector: '#timerP',
-    playerNameInputSelector: '#playerNameInput',
-    scoreTableElSelector: 'tr',
     liveScoreSelector: '#liveScore',
-    scoreTableSelector: '#table-tbody',
     difficultyAreaSelector: '.difficultyArea',
-    introductionSelector: '#introduction'
+    introductionSelector: '#introduction',
+    languageInputSelector: '#languageInput',
+    languageAreaSelector: '.languageArea',
+    playerNameInputSelector: 'playerNameInput'
 });
 
 sonHarfApp.init();

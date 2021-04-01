@@ -4,11 +4,6 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link
-      href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
     <script src="https://kit.fontawesome.com/36a2da0325.js" crossorigin="anonymous"></script>
 
     <title>Son Harf App</title>
@@ -27,12 +22,10 @@
           </tbody>
       </table>
       </div>
-
     <section id="header">
       <h1>Son Harf App</h1>
       <p>Avaliable Chrome Only</p>
     </section>    
-
     <section id="body">
       <div>
         <button id="startMicButton">
@@ -53,41 +46,26 @@
               <option value="hard">Hard</option>
             </select>
           </div>
+          <div class="input-group mb-3 languageArea">
+            <div class="input-group-prepend">
+              <label class="input-group-text badge-pill" for="languageInput">Language</label>
+            </div>
+            <select class="custom-select badge-pill" id="languageInput">
+              <option value="turkish">Turkish</option>
+              <option value="english">English</option>
+            </select>
+          </div>
           <p><span id="timerP" class="badge badge-pill badge-dark">8</span></p>
         <button id="startGameButton" class="btn btn-outline-warning badge-pill">▶️Play</button>
         <button id="reloadGameButton" class="reloadGameButton btn btn-outline-danger badge-pill">Reload Game</button>
-        
       </div>
-      <div id="introduction" class="d-none d-sm-block">
-        <h6><b><i>Yönergeler</i></b></h6>
-        <p>
-          &#9679; Oyuna başlamadan önce mikrofonu etkinleştir. <br>
-          &#9679; Play'e bastığında oyun başlar ve bilgisayar bir isim söyler. <br>
-          &#9679; 8 saniye içinde bilgisayarın söylediği ismin son harfi ile yeni bir isim türet. <br>
-          &#9679; 8 saniye içinde istediğin kadar deneme yapabilirsin. <br>
-          &#9679; Zincirde ilerlediğin her kelime için 1 puan, bilgisayar isim söyleyemezse ve kazanırsan +5 puan alırsın. <br>
-        </p>
-        <h6><b><i>Zorluk Seviyeleri</i></b></h6>
-        <p>
-          &#9679; <b>Easy: </b>Bu modda bilgisayar %30 ihtimalle kelime söyleyemez.  <br>
-          &#9679; <b>Medium: </b>Bu modda bilgisayar %15 ihtimalle kelime söyleyemez.  <br>
-          &#9679; <b>Hard: </b>Bu modda bilgisayar her zaman kelime söyler. Zoru seven oyuncular için!  <br>
-
-        </p>
-
-
-
-
-
-       
-        </div>
+      <div id="introduction" class="d-none d-sm-block"></div>
       </div>
       <div class="container">
         <div class="nameArea" id="nameArea"></div>
       </div>
     </section>
     <p><span id="liveScore" class="badge badge-pill badge-warning ">0</span></p>
-
     <script src="./bundle.js"></script>
   </body>
 </html>

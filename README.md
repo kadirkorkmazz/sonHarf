@@ -1,5 +1,8 @@
 # sonHarf
 
+## 🔴Live: [Projeyi buradan inceleyebilirsiniz.](https://son-harf.vercel.app)
+
+
 ### Son Harf Nedir?
 Son Harf, bilgisayara karşı oynanabilen bir çeşit kelime oyunudur. Oyunda amaç karşıdaki kişinin söylediği ismin son harfi ile yeni bir isim türetmektir. Oynamak için aktif bir mikrofon ve hoparlör yeterli olacaktır.
 Oyunun nasıl ilerlediğine dair bir örnek; <br>
